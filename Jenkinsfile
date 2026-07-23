@@ -29,7 +29,7 @@ pipeline {
                     if (isUnix()) {
                         sh './gradlew checkstyleMain checkstyleTest --no-daemon'
                     } else {
-                        bat 'gradlew.bat checkstyleMain checkstyleTest --no-daemon'
+                        bat 'gradle checkstyleMain checkstyleTest --no-daemon'
                     }
                 }
             }
@@ -42,7 +42,7 @@ pipeline {
                     if (isUnix()) {
                         sh './gradlew test -x integrationTest --no-daemon'
                     } else {
-                        bat 'gradlew.bat test -x integrationTest --no-daemon'
+                        bat 'gradle test -x integrationTest --no-daemon'
                     }
                 }
             }
@@ -60,7 +60,7 @@ pipeline {
                     if (isUnix()) {
                         sh './gradlew integrationTest --no-daemon'
                     } else {
-                        bat 'gradlew.bat integrationTest --no-daemon'
+                        bat 'gradle integrationTest --no-daemon'
                     }
                 }
             }
@@ -78,7 +78,7 @@ pipeline {
                     if (isUnix()) {
                         sh './gradlew dependencyCheckAnalyze --info --no-daemon || true'
                     } else {
-                        bat 'gradlew.bat dependencyCheckAnalyze --info --no-daemon || exit 0'
+                        bat 'gradle dependencyCheckAnalyze --info --no-daemon || exit 0'
                     }
                 }
             }
@@ -91,7 +91,7 @@ pipeline {
                     if (isUnix()) {
                         sh './gradlew bootJar --no-daemon'
                     } else {
-                        bat 'gradlew.bat bootJar --no-daemon'
+                        bat 'gradle bootJar --no-daemon'
                     }
                 }
             }
