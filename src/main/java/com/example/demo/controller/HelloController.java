@@ -175,8 +175,8 @@ public class HelloController {
                         </div>
                         <div class="card">
                             <h3>⚙️ Jenkins Pipeline</h3>
-                            <p>Direct view of automated CI/CD pipeline job builds and execution status.</p>
-                            <a href="http://localhost:8085/job/Java-App-Pipeline/" target="_blank" class="btn">Open Jenkins Pipeline</a>
+                            <p>Direct view of your automated CI/CD pipeline job in local Jenkins.</p>
+                            <a href="http://localhost:8080/job/java-app-pipeline/" target="_blank" class="btn">Open Jenkins Pipeline</a>
                         </div>
                     </div>
 

@@ -25,14 +25,26 @@ pipeline {
         stage('Code Quality (Checkstyle & JaCoCo)') {
             steps {
                 echo "--> Stage 2: Performing Checkstyle static code analysis..."
-                sh './gradlew checkstyleMain checkstyleTest'
+                script {
+                    if (isUnix()) {
+                        sh './gradlew checkstyleMain checkstyleTest'
+                    } else {
+                        bat 'gradlew.bat checkstyleMain checkstyleTest'
+                    }
+                }
             }
         }
 
         stage('Unit Tests') {
             steps {
                 echo "--> Stage 3: Executing Unit Tests..."
-                sh './gradlew test -x integrationTest'
+                script {
+                    if (isUnix()) {
+                        sh './gradlew test -x integrationTest'
+                    } else {
+                        bat 'gradlew.bat test -x integrationTest'
+                    }
+                }
             }
             post {
                 always {
@@ -44,7 +56,13 @@ pipeline {
         stage('Integration Tests') {
             steps {
                 echo "--> Stage 4: Executing Integration Tests..."
-                sh './gradlew integrationTest'
+                script {
+                    if (isUnix()) {
+                        sh './gradlew integrationTest'
+                    } else {
+                        bat 'gradlew.bat integrationTest'
+                    }
+                }
             }
             post {
                 always {
@@ -56,14 +74,26 @@ pipeline {
         stage('Security Vulnerability Scan (OWASP)') {
             steps {
                 echo "--> Stage 5: Analyzing dependencies for known security vulnerabilities..."
-                sh './gradlew dependencyCheckAnalyze --info || true'
+                script {
+                    if (isUnix()) {
+                        sh './gradlew dependencyCheckAnalyze --info || true'
+                    } else {
+                        bat 'gradlew.bat dependencyCheckAnalyze --info || exit 0'
+                    }
+                }
             }
         }
 
         stage('Package Application (Jar)') {
             steps {
                 echo "--> Stage 6: Packaging executable Spring Boot Jar..."
-                sh './gradlew bootJar'
+                script {
+                    if (isUnix()) {
+                        sh './gradlew bootJar'
+                    } else {
+                        bat 'gradlew.bat bootJar'
+                    }
+                }
             }
         }
 
@@ -71,7 +101,11 @@ pipeline {
             steps {
                 echo "--> Stage 7: Building Docker container image ${DOCKER_IMAGE}:${DOCKER_TAG}..."
                 script {
-                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -t ${DOCKER_IMAGE}:latest ."
+                    if (isUnix()) {
+                        sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -t ${DOCKER_IMAGE}:latest ."
+                    } else {
+                        bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -t ${DOCKER_IMAGE}:latest ."
+                    }
                 }
             }
         }
@@ -81,9 +115,13 @@ pipeline {
                 echo "--> Stage 8: Verifying container health & Prometheus actuator metrics..."
                 script {
                     echo "Validating health endpoint response..."
-                    sh "curl -s -f http://localhost:5173/actuator/health || echo 'Deployment verification simulated'"
-                    echo "Validating Prometheus metrics endpoint response..."
-                    sh "curl -s http://localhost:5173/actuator/prometheus | grep -i app_tasks_active_count || echo 'Metrics verification simulated'"
+                    if (isUnix()) {
+                        sh "curl -s -f http://localhost:5173/actuator/health || echo 'Deployment verification simulated'"
+                        sh "curl -s http://localhost:5173/actuator/prometheus | grep -i app_tasks_active_count || echo 'Metrics verification simulated'"
+                    } else {
+                        bat "curl -s -f http://localhost:5173/actuator/health || echo Deployment verification simulated"
+                        bat "curl -s http://localhost:5173/actuator/prometheus || echo Metrics verification simulated"
+                    }
                 }
             }
         }
