@@ -27,9 +27,9 @@ pipeline {
                 echo "--> Stage 2: Performing Checkstyle static code analysis..."
                 script {
                     if (isUnix()) {
-                        sh './gradlew checkstyleMain checkstyleTest'
+                        sh './gradlew checkstyleMain checkstyleTest --no-daemon'
                     } else {
-                        bat 'gradlew.bat checkstyleMain checkstyleTest'
+                        bat 'gradlew.bat checkstyleMain checkstyleTest --no-daemon'
                     }
                 }
             }
@@ -40,9 +40,9 @@ pipeline {
                 echo "--> Stage 3: Executing Unit Tests..."
                 script {
                     if (isUnix()) {
-                        sh './gradlew test -x integrationTest'
+                        sh './gradlew test -x integrationTest --no-daemon'
                     } else {
-                        bat 'gradlew.bat test -x integrationTest'
+                        bat 'gradlew.bat test -x integrationTest --no-daemon'
                     }
                 }
             }
@@ -58,9 +58,9 @@ pipeline {
                 echo "--> Stage 4: Executing Integration Tests..."
                 script {
                     if (isUnix()) {
-                        sh './gradlew integrationTest'
+                        sh './gradlew integrationTest --no-daemon'
                     } else {
-                        bat 'gradlew.bat integrationTest'
+                        bat 'gradlew.bat integrationTest --no-daemon'
                     }
                 }
             }
@@ -76,9 +76,9 @@ pipeline {
                 echo "--> Stage 5: Analyzing dependencies for known security vulnerabilities..."
                 script {
                     if (isUnix()) {
-                        sh './gradlew dependencyCheckAnalyze --info || true'
+                        sh './gradlew dependencyCheckAnalyze --info --no-daemon || true'
                     } else {
-                        bat 'gradlew.bat dependencyCheckAnalyze --info || exit 0'
+                        bat 'gradlew.bat dependencyCheckAnalyze --info --no-daemon || exit 0'
                     }
                 }
             }
@@ -89,9 +89,9 @@ pipeline {
                 echo "--> Stage 6: Packaging executable Spring Boot Jar..."
                 script {
                     if (isUnix()) {
-                        sh './gradlew bootJar'
+                        sh './gradlew bootJar --no-daemon'
                     } else {
-                        bat 'gradlew.bat bootJar'
+                        bat 'gradlew.bat bootJar --no-daemon'
                     }
                 }
             }
