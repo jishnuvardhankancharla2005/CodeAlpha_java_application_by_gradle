@@ -165,26 +165,26 @@ public class HelloController {
                         </div>
                         <div class="card">
                             <h3>🔥 Prometheus Engine</h3>
-                            <p>Scrapes application JVM telemetry and system host metrics on port 9090.</p>
-                            <a href="http://localhost:9090" target="_blank" class="btn">Open Prometheus (9090)</a>
+                            <p>Direct view of live task metric graphs scraped by Prometheus engine.</p>
+                            <a href="http://localhost:9090/graph?g0.expr=app_tasks_created_total&g0.tab=0" target="_blank" class="btn">Open Prometheus Graph</a>
                         </div>
                         <div class="card">
                             <h3>📈 Grafana Analytics</h3>
-                            <p>Visual dashboards pre-provisioned for JVM memory, RPS, and system OS metrics.</p>
-                            <a href="http://localhost:3000" target="_blank" class="btn">Open Grafana (3000)</a>
+                            <p>Direct view of visual dashboards pre-configured for JVM memory & RPS metrics.</p>
+                            <a href="http://localhost:3000/d/java-app-metrics/java-spring-boot-application-dashboard?orgId=1" target="_blank" class="btn">Open Grafana Dashboard</a>
                         </div>
                         <div class="card">
                             <h3>⚙️ Jenkins Pipeline</h3>
-                            <p>Automated 8-stage CI/CD pipeline server running on port 8085.</p>
-                            <a href="http://localhost:8085" target="_blank" class="btn">Open Jenkins (8085)</a>
+                            <p>Direct view of automated CI/CD pipeline job builds and execution status.</p>
+                            <a href="http://localhost:8085/job/Java-App-Pipeline/" target="_blank" class="btn">Open Jenkins Pipeline</a>
                         </div>
                     </div>
 
                     <div class="actions">
                         <h2>⚡ Quick Metric Simulator</h2>
                         <div class="action-grid">
-                            <button class="action-btn" onclick="fetch('/api/tasks/simulate/work?durationMs=300', {method:'POST'}).then(r=>alert('Workload metric generated!'))">⚡ Trigger Workload Latency</button>
-                            <button class="action-btn danger" onclick="fetch('/api/tasks/simulate/error').then(r=>alert('Simulated 500 error metric!'))">⚠️ Simulate Error (HTTP 500)</button>
+                            <button class="action-btn" onclick="fetch('/api/tasks/simulate/work?durationMs=300', {method:'POST'}).then(r=>alert('Workload metric generated! Check Grafana graphs.'))">⚡ Trigger Workload Latency</button>
+                            <button class="action-btn danger" onclick="fetch('/api/tasks/simulate/error').then(r=>alert('Simulated 500 error metric! Check Grafana error panel.'))">⚠️ Simulate Error (HTTP 500)</button>
                             <a href="/actuator/prometheus" target="_blank" class="action-btn btn-outline" style="text-align:center; text-decoration:none;">📄 Raw Actuator Metrics</a>
                         </div>
                     </div>

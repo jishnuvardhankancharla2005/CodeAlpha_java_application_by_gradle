@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'jdk-25'
-        gradle 'gradle-8.5'
-    }
-
     environment {
         APP_NAME = "demo-app"
         DOCKER_IMAGE = "demo-app"

@@ -1,5 +1,5 @@
-# Stage 1: Build the application with JDK 25
-FROM eclipse-temurin:25-jdk-alpine AS builder
+# Stage 1: Build the application with JDK 21 LTS
+FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
 # Copy gradle wrapper, configuration files, and source code
@@ -15,8 +15,8 @@ RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 # Build the application using gradlew wrapper
 RUN ./gradlew build -x test -x integrationTest --no-daemon
 
-# Stage 2: Create Java 25 runtime image
-FROM eclipse-temurin:25-jre-alpine
+# Stage 2: Create Java 21 LTS runtime image
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Create a non-root user for security

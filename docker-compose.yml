@@ -51,7 +51,7 @@ services:
       - monitoring
 
   jenkins:
-    image: jenkins/jenkins:lts-jdk25
+    image: jenkins/jenkins:lts-jdk21
     container_name: jenkins-ci
     ports:
       - "8085:8080"
