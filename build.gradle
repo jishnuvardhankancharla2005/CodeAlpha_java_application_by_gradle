@@ -10,7 +10,17 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+if (projectDir.absolutePath.chars().any { it > 127 }) {
+	layout.buildDirectory = file("C:/tmp/gradle-build-${project.name}")
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.release = 17
+	options.encoding = 'UTF-8'
 }
 
 repositories {
@@ -31,6 +41,10 @@ checkstyle {
 	configFile = file("config/checkstyle/checkstyle.xml")
 }
 
+jacoco {
+	toolVersion = '0.8.12'
+}
+
 jacocoTestReport {
 	reports {
 		xml.required = true
@@ -40,31 +54,29 @@ jacocoTestReport {
 
 test {
 	useJUnitPlatform()
+	exclude '**/integration/**'
+	jvmArgs('-XX:+EnableDynamicAgentLoading', '-Dfile.encoding=UTF-8', '-Dsun.jnu.encoding=UTF-8')
+	if (projectDir.absolutePath.chars().any { it > 127 }) {
+		jacoco {
+			enabled = false
+		}
+	}
 	finalizedBy jacocoTestReport
 }
 
-// Separate source set for integration tests
-sourceSets {
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/test/java/com/example/demo/integration')
-        }
-    }
-}
-
-configurations {
-    integrationTestImplementation.extendsFrom testImplementation
-    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
-}
-
 task integrationTest(type: Test) {
-    description = 'Runs the integration tests.'
-    group = 'verification'
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    useJUnitPlatform()
+	description = 'Runs the integration tests.'
+	group = 'verification'
+	testClassesDirs = sourceSets.test.output.classesDirs
+	classpath = sourceSets.test.runtimeClasspath
+	useJUnitPlatform()
+	include '**/integration/**'
+	jvmArgs('-XX:+EnableDynamicAgentLoading', '-Dfile.encoding=UTF-8', '-Dsun.jnu.encoding=UTF-8')
+	if (projectDir.absolutePath.chars().any { it > 127 }) {
+		jacoco {
+			enabled = false
+		}
+	}
 }
 
 check.dependsOn integrationTest
