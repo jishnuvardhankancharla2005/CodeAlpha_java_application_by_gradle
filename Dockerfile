@@ -1,26 +1,31 @@
-# Stage 1: Build the application
-FROM gradle:8.5-jdk17 AS builder
+# Stage 1: Build the application with JDK 25
+FROM eclipse-temurin:25-jdk-alpine AS builder
 WORKDIR /app
 
-# Copy gradle configuration files and source code
+# Copy gradle wrapper, configuration files, and source code
+COPY gradlew ./
+COPY gradle ./gradle
 COPY build.gradle settings.gradle ./
 COPY src ./src
 COPY config ./config
 
-# Build the application (skipping tests for the docker build, as tests are run in CI pipeline)
-RUN gradle build -x test -x integrationTest --no-daemon
+# Fix CRLF line endings for Alpine Linux shell and set permissions
+RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 
-# Stage 2: Create the minimal runtime image
-FROM eclipse-temurin:17-jre-alpine
+# Build the application using gradlew wrapper
+RUN ./gradlew build -x test -x integrationTest --no-daemon
+
+# Stage 2: Create Java 25 runtime image
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 
-# Create a non-root user for better security
+# Create a non-root user for security
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Copy the built jar from the builder stage
 COPY --from=builder /app/build/libs/*-SNAPSHOT.jar app.jar
 
-# Change ownership to the non-root user
+# Change ownership to non-root user
 RUN chown -R appuser:appgroup /app
 
 USER appuser
