@@ -1,0 +1,6 @@
+namespace: demo-prod
+namePrefix: prod-
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - deployment-patch.yaml

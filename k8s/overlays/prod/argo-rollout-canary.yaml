@@ -1,0 +1,42 @@
+# Example Argo Rollout for Canary Deployments
+# Replace your base deployment with this if you install Argo Rollouts
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: demo-app
+spec:
+  replicas: 3
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 10m}
+      - setWeight: 40
+      - pause: {duration: 10m}
+      - setWeight: 80
+      - pause: {duration: 10m}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "5173"
+    spec:
+      containers:
+      - name: demo-app
+        image: demo-app:latest
+        ports:
+        - containerPort: 5173
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"

@@ -1,0 +1,24 @@
+server:
+  port: 5173
+
+spring:
+  application:
+    name: demo-app
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      env: production
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true

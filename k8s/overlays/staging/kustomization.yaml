@@ -1,0 +1,6 @@
+namespace: demo-staging
+namePrefix: staging-
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - deployment-patch.yaml

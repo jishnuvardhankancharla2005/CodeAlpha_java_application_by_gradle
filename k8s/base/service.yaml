@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app
+spec:
+  selector:
+    app: demo-app
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80
+      targetPort: 5173
+  type: ClusterIP

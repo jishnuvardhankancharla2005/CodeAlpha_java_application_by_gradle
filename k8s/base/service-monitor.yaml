@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: demo-app-monitor
+  labels:
+    release: prometheus # assuming prometheus operator uses this label
+spec:
+  selector:
+    matchLabels:
+      app: demo-app
+  endpoints:
+  - port: web # matches the port name in Service (needs to be updated if named differently, but we used port 80 targeting 8080. Wait, service doesn't have port name. I should fix that.)
+    path: /actuator/prometheus
+    interval: 15s
