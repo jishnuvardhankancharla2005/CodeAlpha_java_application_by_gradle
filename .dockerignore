@@ -1,5 +1,10 @@
 .gradle
 .idea
-build
+build/classes
+build/dependency-cache
+build/jacoco
+build/reports
+build/test-results
+build/tmp
 !build/libs/*.jar
 *.class

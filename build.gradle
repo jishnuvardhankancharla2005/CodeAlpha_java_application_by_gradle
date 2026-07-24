@@ -101,3 +101,10 @@ task integrationTest(type: Test) {
 }
 
 check.dependsOn integrationTest
+
+tasks.register('copyJarToLocal', Copy) {
+	from "${layout.buildDirectory.get().asFile}/libs"
+	into "${projectDir}/build/libs"
+	include "*.jar"
+}
+bootJar.finalizedBy copyJarToLocal
