@@ -56,8 +56,14 @@ jacocoTestReport {
 }
 
 dependencyCheck {
-	autoUpdate = false
+	autoUpdate = true
 	failOnError = false
+	failBuildOnCVSS = 8.0
+	suppressionFile = 'config/dependency-check-suppressions.xml'
+	analyzers {
+		assemblyEnabled = false
+		centralEnabled = true
+	}
 }
 
 tasks.withType(Test).configureEach {
