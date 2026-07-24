@@ -33,6 +33,8 @@ dependencies {
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'net.bytebuddy:byte-buddy:1.15.11'
+	testImplementation 'net.bytebuddy:byte-buddy-agent:1.15.11'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -52,10 +54,19 @@ jacocoTestReport {
 	}
 }
 
-test {
+tasks.withType(Test).configureEach {
 	useJUnitPlatform()
+	jvmArgs(
+		'-XX:+EnableDynamicAgentLoading',
+		'--enable-native-access=ALL-UNNAMED',
+		'-Dnet.bytebuddy.experimental=true',
+		'-Dfile.encoding=UTF-8',
+		'-Dsun.jnu.encoding=UTF-8'
+	)
+}
+
+test {
 	exclude '**/integration/**'
-	jvmArgs('-XX:+EnableDynamicAgentLoading', '-Dfile.encoding=UTF-8', '-Dsun.jnu.encoding=UTF-8')
 	if (projectDir.absolutePath.chars().any { it > 127 }) {
 		jacoco {
 			enabled = false
@@ -69,9 +80,7 @@ task integrationTest(type: Test) {
 	group = 'verification'
 	testClassesDirs = sourceSets.test.output.classesDirs
 	classpath = sourceSets.test.runtimeClasspath
-	useJUnitPlatform()
 	include '**/integration/**'
-	jvmArgs('-XX:+EnableDynamicAgentLoading', '-Dfile.encoding=UTF-8', '-Dsun.jnu.encoding=UTF-8')
 	if (projectDir.absolutePath.chars().any { it > 127 }) {
 		jacoco {
 			enabled = false
