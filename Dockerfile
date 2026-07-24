@@ -30,6 +30,6 @@ RUN chown -R appuser:appgroup /app
 
 USER appuser
 
-EXPOSE 5173
+EXPOSE 8085
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

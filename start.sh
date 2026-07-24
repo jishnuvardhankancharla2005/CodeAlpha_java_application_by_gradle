@@ -11,15 +11,15 @@ sleep 6
 
 echo "Opening application in web browser..."
 if command -v xdg-open &> /dev/null; then
-    xdg-open http://localhost:5173
+    xdg-open http://localhost:8085
 elif command -v open &> /dev/null; then
-    open http://localhost:5173
+    open http://localhost:8085
 elif command -v start &> /dev/null; then
-    start http://localhost:5173
+    start http://localhost:8085
 fi
 
 echo ""
 echo "==================================================="
 echo "  APPLICATION STARTED!"
-echo "  Application URL: http://localhost:5173"
+echo "  Application URL: http://localhost:8085"
 echo "==================================================="

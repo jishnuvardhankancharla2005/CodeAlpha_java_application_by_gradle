@@ -10,10 +10,10 @@ echo [2/2] Waiting for application startup...
 ping 127.0.0.1 -n 6 >nul
 
 echo Opening application in web browser...
-start http://localhost:5173
+start http://localhost:8085
 
 echo.
 echo ===================================================
 echo   APPLICATION STARTED!
-echo   Application URL: http://localhost:5173
+echo   Application URL: http://localhost:8085
 echo ===================================================

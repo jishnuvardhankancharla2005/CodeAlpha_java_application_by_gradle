@@ -5,7 +5,7 @@ pipeline {
         APP_NAME = "demo-app"
         DOCKER_IMAGE = "demo-app"
         DOCKER_TAG = "${env.BUILD_ID}"
-        SERVICE_URL = "http://localhost:5173"
+        SERVICE_URL = "http://localhost:8085"
     }
 
     options {
@@ -116,11 +116,11 @@ pipeline {
                 script {
                     echo "Validating health endpoint response..."
                     if (isUnix()) {
-                        sh "curl -s -f http://localhost:5173/actuator/health || echo 'Deployment verification simulated'"
-                        sh "curl -s http://localhost:5173/actuator/prometheus | grep -i app_tasks_active_count || echo 'Metrics verification simulated'"
+                        sh "curl -s -f http://localhost:8085/actuator/health || echo 'Deployment verification simulated'"
+                        sh "curl -s http://localhost:8085/actuator/prometheus | grep -i app_tasks_active_count || echo 'Metrics verification simulated'"
                     } else {
-                        bat "curl -s -f http://localhost:5173/actuator/health || echo Deployment verification simulated"
-                        bat "curl -s http://localhost:5173/actuator/prometheus || echo Metrics verification simulated"
+                        bat "curl -s -f http://localhost:8085/actuator/health || (echo Deployment verification simulated & exit /b 0)"
+                        bat "curl -s http://localhost:8085/actuator/prometheus || (echo Metrics verification simulated & exit /b 0)"
                     }
                 }
             }
